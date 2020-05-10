@@ -1,42 +1,27 @@
+#!groovy
 pipeline {
-  agent any
-  stages {
-    stage('Clean') {
-      steps {
-        sh 'mvn clean'
-      }
-    }
+    agent any
+   stages {
+    stage('Running Maven and Generating .jar file') {
+  steps {
+       sh 'mvn clean package -DskipTests'
+       }
+     }
+     stage('BUILD Docker Images'){
+     steps{
+      sh 'docker build -t durgayasasvi/devopscalc:latest .'
+     }
+     }
+     stage('PUBLISH to DockerHub')
+    {
+        steps
+        {
+            withDockerRegistry([ credentialsId: "DockerHub", url: "" ])
+            {
+              sh 'docker push durgayasasvi/devopscalc:latest'
 
-    stage('Compile') {
-      steps {
-        sh 'mvn compile'
-      }
-    }
-
-    stage('Test') {
-      steps {
-        sh 'mvn install'
-      }
-    }
-
-    stage('Build Image') {
-      steps {
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+            }
         }
-
-      }
-    }
-
-    stage('Push Image') {
-      steps {
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
-        }
-
-      }
     }
     // stage('Deploy using Rundeck') {
     //   agent any
@@ -49,14 +34,9 @@ pipeline {
     //       options: """
     //         BUILD_VERSION=$BUILD_NUMBER
     //       """,
-    //       jobId: "52c6c24b-e155-43a9-913c-2cb7b6e51f91"])
+    //       jobId: "d0b18ecc-9734-4277-a42e-867aee27a2b4"])
     //     }
     //   }
-    //   }
-
-  }
-  environment {
-    registry = 'durgayasasvi/devopscalc'
-    registryCredential = 'dockerhub'
-  }
-}
+    // }
+   }
+ }
