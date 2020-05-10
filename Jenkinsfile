@@ -19,25 +19,25 @@ pipeline {
       }
     }
 
-  //   stage('Build Image') {
-  //     steps {
-  //       script {
-  //         dockerImage = docker.build registry + ":$BUILD_NUMBER"
-  //       }
+    stage('Build Image') {
+      steps {
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
 
-  //     }
-  //   }
+      }
+    }
 
-  //   stage('Push Image') {
-  //     steps {
-  //       script {
-  //         docker.withRegistry( '', registryCredential ) {
-  //           dockerImage.push()
-  //         }
-  //       }
+    stage('Push Image') {
+      steps {
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
 
-  //     }
-  //   }
+      }
+    }
 
   //   stage('Deploy using Rundeck') {
   //     agent any
@@ -57,8 +57,8 @@ pipeline {
   //   }
 
   // }
-  // environment {
-  //   registry = 'durgayasasvi/devopscalc'
-  //   registryCredential = 'dockerhub'
-  // }
+  environment {
+    registry = 'durgayasasvi/devopscalc'
+    registryCredential = 'dockerhub'
+  }
 }
