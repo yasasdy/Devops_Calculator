@@ -7,6 +7,11 @@ pipeline {
        sh 'mvn clean package -DskipTests'
        }
      }
+     stage('Test') {
+     	steps {
+     		sh 'mvn test'
+     	}
+     }
      stage('BUILD Docker Images'){
      steps{
       sh 'docker build -t durgayasasvi/devopscalc:latest .'
