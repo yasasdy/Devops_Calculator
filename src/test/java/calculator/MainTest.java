@@ -2,13 +2,13 @@ package calculator;
 
 import org.junit.*;
 
-public class CalculatorTests {
+public class MainTest {
     
-    private Calculator calculator;
+    private Main calculator;
     
     @Before
     public void setUp() {
-        calculator = new Calculator();
+        calculator = new Main();
     }
 
     @Test
